@@ -129,6 +129,6 @@ echo "  停止:      ${INSTALL_DIR}/stop.sh"
 echo ""
 
 read -r -p "是否现在启动挖矿? [y/N]: " GO
-if [[ "${GO,,}" == "y" ]]; then
-  exec "${INSTALL_DIR}/start.sh"
-fi
+case "$GO" in
+  y|Y|yes|YES) exec "${INSTALL_DIR}/start.sh" ;;
+esac
