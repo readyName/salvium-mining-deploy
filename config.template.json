@@ -1,0 +1,33 @@
+{
+    "autosave": false,
+    "cpu": {
+        "enabled": true,
+        "huge-pages": false,
+        "huge-pages-jit": false,
+        "yield": true,
+        "rx": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    },
+    "opencl": { "enabled": false },
+    "cuda": { "enabled": false },
+    "donate-level": 1,
+    "pools": [
+        {
+            "algo": "rx/0",
+            "url": "sal-sg.kryptex.network:7028",
+            "user": "SC1_WALLET_PLACEHOLDER/WORKER_PLACEHOLDER",
+            "pass": "x",
+            "keepalive": true,
+            "enabled": true,
+            "tls": false
+        }
+    ],
+    "retries": 5,
+    "retry-pause": 5,
+    "print-time": 60,
+    "watch": true,
+    "pause-on-battery": true,
+    "randomx": {
+        "1gb-pages": false,
+        "mode": "auto"
+    }
+}
