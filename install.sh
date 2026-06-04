@@ -1,27 +1,35 @@
 #!/bin/bash
-# 一键安装：curl | bash 或 bash install.sh（无需 git）
+# 一键安装：git clone 后执行 setup-mac.sh（推荐）
 set -euo pipefail
 
 REPO="${SALVIUM_DEPLOY_REPO:-readyName/salvium-mining-deploy}"
 BRANCH="${SALVIUM_DEPLOY_BRANCH:-main}"
-RAW_BASE="https://raw.githubusercontent.com/${REPO}/${BRANCH}"
 INSTALL_ROOT="${HOME}/salvium-mining-deploy"
+REPO_URL="https://github.com/${REPO}.git"
 
 echo "=== Salvium 挖矿 · 一键安装 ==="
-echo "源: ${RAW_BASE}"
+echo "仓库: ${REPO_URL}"
 echo ""
 
-mkdir -p "${INSTALL_ROOT}"
+if ! command -v git >/dev/null 2>&1; then
+  echo "未安装 git，请先执行: xcode-select --install"
+  exit 1
+fi
 
-echo "下载部署脚本…"
-curl -fsSL "${RAW_BASE}/setup-mac.sh" -o "${INSTALL_ROOT}/setup-mac.sh"
-curl -fsSL "${RAW_BASE}/config.template.json" -o "${INSTALL_ROOT}/config.template.json"
+if [[ -d "${INSTALL_ROOT}/.git" ]]; then
+  echo "更新已有目录 ${INSTALL_ROOT} …"
+  git -C "${INSTALL_ROOT}" fetch origin "${BRANCH}" 2>/dev/null || true
+  git -C "${INSTALL_ROOT}" reset --hard "origin/${BRANCH}" 2>/dev/null || \
+    git -C "${INSTALL_ROOT}" pull --ff-only origin "${BRANCH}" 2>/dev/null || true
+elif [[ -d "${INSTALL_ROOT}" ]]; then
+  echo "错误: ${INSTALL_ROOT} 已存在但不是 git 仓库。"
+  echo "请执行: rm -rf ${INSTALL_ROOT}"
+  echo "或: cd ${INSTALL_ROOT} && git pull && ./setup-mac.sh"
+  exit 1
+else
+  git clone --depth 1 -b "${BRANCH}" "${REPO_URL}" "${INSTALL_ROOT}"
+fi
 
 chmod +x "${INSTALL_ROOT}/setup-mac.sh"
 cd "${INSTALL_ROOT}"
-# curl | bash 时让 setup-mac.sh 从终端读入（修复 read 被跳过）
-if [[ -e /dev/tty ]]; then
-  exec ./setup-mac.sh </dev/tty
-else
-  exec ./setup-mac.sh
-fi
+exec ./setup-mac.sh
