@@ -22,10 +22,10 @@ if [[ -d "${INSTALL_ROOT}/.git" ]]; then
   git -C "${INSTALL_ROOT}" reset --hard "origin/${BRANCH}" 2>/dev/null || \
     git -C "${INSTALL_ROOT}" pull --ff-only origin "${BRANCH}" 2>/dev/null || true
 elif [[ -d "${INSTALL_ROOT}" ]]; then
-  echo "错误: ${INSTALL_ROOT} 已存在但不是 git 仓库。"
-  echo "请执行: rm -rf ${INSTALL_ROOT}"
-  echo "或: cd ${INSTALL_ROOT} && git pull && ./setup-mac.sh"
-  exit 1
+  BACKUP="${INSTALL_ROOT}.bak.$(date +%Y%m%d_%H%M%S)"
+  echo ">>> ${INSTALL_ROOT} 已存在但不是 git 仓库，自动备份到 ${BACKUP} 并重新克隆…"
+  mv "${INSTALL_ROOT}" "${BACKUP}"
+  git clone --depth 1 -b "${BRANCH}" "${REPO_URL}" "${INSTALL_ROOT}"
 else
   git clone --depth 1 -b "${BRANCH}" "${REPO_URL}" "${INSTALL_ROOT}"
 fi
