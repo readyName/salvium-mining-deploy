@@ -5,7 +5,13 @@
 **复制这一条即可（新机器 / 已装过都能用）：**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/readyName/salvium-mining-deploy/main/deploy.sh | bash
+curl -fsSL "https://raw.githubusercontent.com/readyName/salvium-mining-deploy/main/deploy.sh?v=2" | bash
+```
+
+若仍提示旧版错误，用下面这条（绕过 CDN 缓存）：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/readyName/salvium-mining-deploy/db33b5b/deploy.sh | bash
 ```
 
 或已 clone 过仓库时，在任意目录执行：

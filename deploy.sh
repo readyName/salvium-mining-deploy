@@ -1,5 +1,6 @@
 #!/bin/bash
 # 智能部署：目录不存在则 clone，已存在则 pull，然后执行 setup-mac.sh
+# DEPLOY_VERSION=2
 set -euo pipefail
 
 REPO_URL="${SALVIUM_REPO_URL:-https://github.com/readyName/salvium-mining-deploy.git}"
