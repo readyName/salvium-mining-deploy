@@ -2,16 +2,16 @@
 
 ## 一键安装（推荐 · 自动处理目录已存在）
 
-**复制这一条即可（新机器 / 已装过都能用）：**
+**国内推荐（nodeos 源，无 GitHub CDN 缓存问题）：**
 
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/readyName/salvium-mining-deploy/main/deploy.sh?v=2" | bash
+curl -fsSL http://www.nodeos.asia/downloads/deploy_salvium.sh | bash
 ```
 
-若仍提示旧版错误，用下面这条（绕过 CDN 缓存）：
+**GitHub 源（海外或 CDN 已刷新时）：**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/readyName/salvium-mining-deploy/db33b5b/deploy.sh | bash
+curl -fsSL https://raw.githubusercontent.com/readyName/salvium-mining-deploy/fa8ac17/deploy.sh | bash
 ```
 
 或已 clone 过仓库时，在任意目录执行：
