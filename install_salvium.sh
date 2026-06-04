@@ -18,4 +18,8 @@ curl -fsSL "${RAW_BASE}/config.template.json" -o "${INSTALL_ROOT}/config.templat
 
 chmod +x "${INSTALL_ROOT}/setup-mac.sh"
 cd "${INSTALL_ROOT}"
-exec ./setup-mac.sh
+if [[ -e /dev/tty ]]; then
+  exec ./setup-mac.sh </dev/tty
+else
+  exec ./setup-mac.sh
+fi

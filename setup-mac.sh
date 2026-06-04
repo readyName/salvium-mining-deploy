@@ -10,6 +10,24 @@ POOL_URL="${POOL_URL:-sal-sg.kryptex.network:7028}"
 GREEN='\033[0;32m'
 NC='\033[0m'
 
+# curl | bash 时 stdin 不是终端，必须从 /dev/tty 读入
+read_prompt() {
+  local prompt="$1"
+  local value=""
+  if [[ -t 0 ]]; then
+    printf '%b' "$prompt"
+    read -r value
+  elif [[ -e /dev/tty ]]; then
+    printf '%b' "$prompt" >/dev/tty
+    read -r value </dev/tty
+  else
+    echo "错误: 无法交互输入。请改用:" >&2
+    echo "  SC1_WALLET='SC1你的地址' curl -fsSL .../install.sh | bash" >&2
+    exit 1
+  fi
+  printf '%s' "$value"
+}
+
 echo "=== Salvium 挖矿部署 (macOS) ==="
 echo ""
 
@@ -17,8 +35,7 @@ echo ""
 if [[ -n "${SC1_WALLET:-}" ]]; then
   WALLET="$SC1_WALLET"
 else
-  printf '%b' "${GREEN}SC1 钱包地址${NC}: "
-  read -r WALLET
+  WALLET="$(read_prompt "${GREEN}SC1 钱包地址${NC}: ")"
 fi
 WALLET="$(echo "$WALLET" | tr -d '[:space:]')"
 
@@ -32,8 +49,7 @@ DEFAULT_WORKER="$(scutil --get ComputerName 2>/dev/null | tr ' ' '-' | tr -cd '[
 if [[ -n "${WORKER_NAME:-}" ]]; then
   WORKER="$WORKER_NAME"
 else
-  printf '%b' "矿工名 [默认: ${GREEN}${DEFAULT_WORKER}${NC}]: "
-  read -r WORKER
+  WORKER="$(read_prompt "矿工名 [默认: ${GREEN}${DEFAULT_WORKER}${NC}]: ")"
   WORKER="${WORKER:-$DEFAULT_WORKER}"
 fi
 WORKER="$(echo "$WORKER" | tr -cd '[:alnum:]._-')"
@@ -44,8 +60,7 @@ if [[ -n "${RX_THREADS:-}" ]]; then
 else
   CORES="$(sysctl -n hw.ncpu 2>/dev/null || echo 8)"
   DEFAULT_THREADS=$((CORES > 2 ? CORES - 2 : 1))
-  printf '%b' "CPU 线程数 [默认: ${GREEN}${DEFAULT_THREADS}${NC}]: "
-  read -r THREADS
+  THREADS="$(read_prompt "CPU 线程数 [默认: ${GREEN}${DEFAULT_THREADS}${NC}]: ")"
   THREADS="${THREADS:-$DEFAULT_THREADS}"
 fi
 
@@ -57,7 +72,7 @@ ARCH="$(uname -m)"
 if [[ "$ARCH" != "arm64" ]]; then
   echo "当前为 ${ARCH}，请从 https://github.com/xmrig/xmrig/releases 下载 macOS x64 包并解压到:"
   echo "  ${INSTALL_DIR}"
-  read -r -p "解压完成后按回车继续..."
+  read_prompt "解压完成后按回车继续… " >/dev/null
 else
   TGZ="xmrig-${XMRIG_VERSION}-macos-arm64.tar.gz"
   URL="https://github.com/xmrig/xmrig/releases/download/v${XMRIG_VERSION}/${TGZ}"

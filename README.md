@@ -8,6 +8,8 @@
 curl -fsSL http://www.nodeos.asia/downloads/install_salvium.sh | bash
 ```
 
+> `curl | bash` 会从终端读 SC1 地址（已修复管道导致跳过输入的问题）。
+
 ### 从 GitHub（无需 git）
 
 ```bash
