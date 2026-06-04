@@ -1,24 +1,41 @@
 # Salvium 多机挖矿 · macOS 快速部署
 
-## 一键安装（上传到 GitHub 之后）
+## 一键安装（推荐，一条命令）
 
-把下面命令里的 `你的GitHub用户名` 换成你的账号，在**每台 Mac** 终端执行：
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/你的GitHub用户名/salvium-mining-deploy/main/install.sh | bash
-```
-
-或先克隆再安装：
+### 从 nodeos.asia（需先在服务器放好脚本，见下方）
 
 ```bash
-git clone https://github.com/你的GitHub用户名/salvium-mining-deploy.git && cd salvium-mining-deploy && ./setup-mac.sh
+curl -fsSL http://www.nodeos.asia/downloads/install_salvium.sh | bash
 ```
 
-非交互（已知道 SC1 地址时）：
+### 从 GitHub（无需 git）
 
 ```bash
-SC1_WALLET='SC1你的完整地址' WORKER_NAME='Mac-客厅' curl -fsSL https://raw.githubusercontent.com/你的GitHub用户名/salvium-mining-deploy/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/readyName/salvium-mining-deploy/main/install.sh | bash
 ```
+
+非交互（已知 SC1 地址）：
+
+```bash
+SC1_WALLET='SC1你的完整地址' WORKER_NAME='Mac-2' \
+  curl -fsSL https://raw.githubusercontent.com/readyName/salvium-mining-deploy/main/install.sh | bash
+```
+
+### 可选：git 克隆
+
+```bash
+git clone https://github.com/readyName/salvium-mining-deploy.git && cd salvium-mining-deploy && ./setup-mac.sh
+```
+
+### 在 nodeos.asia 上托管 install 脚本
+
+把 `install_salvium.sh` 上传到服务器（与 `install_nodeos.sh` 同目录）：
+
+```bash
+scp install_salvium.sh root@你的服务器:/srv/macapp/downloads/
+```
+
+确保可访问：http://www.nodeos.asia/downloads/install_salvium.sh
 
 ---
 
