@@ -7,6 +7,9 @@ INSTALL_DIR="${HOME}/salvium-mining/xmrig"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 POOL_URL="${POOL_URL:-sal-sg.kryptex.network:7028}"
 
+GREEN='\033[0;32m'
+NC='\033[0m'
+
 echo "=== Salvium 挖矿部署 (macOS) ==="
 echo ""
 
@@ -14,7 +17,8 @@ echo ""
 if [[ -n "${SC1_WALLET:-}" ]]; then
   WALLET="$SC1_WALLET"
 else
-  read -r -p "粘贴 SC1 钱包地址: " WALLET
+  printf '%b' "${GREEN}SC1 钱包地址${NC}: "
+  read -r WALLET
 fi
 WALLET="$(echo "$WALLET" | tr -d '[:space:]')"
 
@@ -28,7 +32,8 @@ DEFAULT_WORKER="$(scutil --get ComputerName 2>/dev/null | tr ' ' '-' | tr -cd '[
 if [[ -n "${WORKER_NAME:-}" ]]; then
   WORKER="$WORKER_NAME"
 else
-  read -r -p "矿工名 [默认: ${DEFAULT_WORKER}]: " WORKER
+  printf '%b' "矿工名 [默认: ${GREEN}${DEFAULT_WORKER}${NC}]: "
+  read -r WORKER
   WORKER="${WORKER:-$DEFAULT_WORKER}"
 fi
 WORKER="$(echo "$WORKER" | tr -cd '[:alnum:]._-')"
@@ -39,7 +44,8 @@ if [[ -n "${RX_THREADS:-}" ]]; then
 else
   CORES="$(sysctl -n hw.ncpu 2>/dev/null || echo 8)"
   DEFAULT_THREADS=$((CORES > 2 ? CORES - 2 : 1))
-  read -r -p "CPU 线程数 [默认: ${DEFAULT_THREADS}]: " THREADS
+  printf '%b' "CPU 线程数 [默认: ${GREEN}${DEFAULT_THREADS}${NC}]: "
+  read -r THREADS
   THREADS="${THREADS:-$DEFAULT_THREADS}"
 fi
 
@@ -127,8 +133,5 @@ echo "  前台挖矿:  ${INSTALL_DIR}/start.sh"
 echo "  后台挖矿:  ${INSTALL_DIR}/start-background.sh"
 echo "  停止:      ${INSTALL_DIR}/stop.sh"
 echo ""
-
-read -r -p "是否现在启动挖矿? [y/N]: " GO
-case "$GO" in
-  y|Y|yes|YES) exec "${INSTALL_DIR}/start.sh" ;;
-esac
+echo "正在启动前台挖矿…"
+exec "${INSTALL_DIR}/start.sh"
