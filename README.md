@@ -1,23 +1,23 @@
 # Salvium 多机挖矿 · macOS 快速部署
 
-## 一键安装（推荐 · git clone）
+## 一键安装（推荐 · 自动处理目录已存在）
 
-**新机器：**
+**复制这一条即可（新机器 / 已装过都能用）：**
 
 ```bash
-git clone https://github.com/readyName/salvium-mining-deploy.git && cd salvium-mining-deploy && chmod +x setup-mac.sh && ./setup-mac.sh
+curl -fsSL https://raw.githubusercontent.com/readyName/salvium-mining-deploy/main/deploy.sh | bash
 ```
 
-**已有目录（更新并重新部署）：**
+或已 clone 过仓库时，在任意目录执行：
 
 ```bash
-cd ~/salvium-mining-deploy && git pull && chmod +x setup-mac.sh && ./setup-mac.sh
+cd ~/salvium-mining-deploy && git pull && chmod +x deploy.sh setup-mac.sh && ./deploy.sh
 ```
 
-**一条命令（自动判断新装 / 更新）：**
+**等价一行（不用 curl，需已安装 git）：**
 
 ```bash
-[ -d ~/salvium-mining-deploy/.git ] && cd ~/salvium-mining-deploy && git pull || git clone https://github.com/readyName/salvium-mining-deploy.git ~/salvium-mining-deploy; cd ~/salvium-mining-deploy && chmod +x setup-mac.sh && ./setup-mac.sh
+bash -c 'R=~/salvium-mining-deploy; if [ -d "$R/.git" ]; then git -C "$R" pull; elif [ -d "$R" ]; then echo "请先 rm -rf $R"; exit 1; else git clone https://github.com/readyName/salvium-mining-deploy.git "$R"; fi; cd "$R" && chmod +x setup-mac.sh && ./setup-mac.sh'
 ```
 
 非交互（已知 SC1 地址）：
